@@ -183,10 +183,10 @@ namespace MetaThief
 
                 while (thread3.IsAlive) Thread.Sleep(1);
 
-                if (!password) Teleport(driver, "#password", "ILOVENIGGERS");
+                if (!password) Teleport(driver, "#password", "ELONMUSK33");
 
 
-                if (!password) Teleport(driver, "#confirm-password", "ILOVENIGGERS");
+                if (!password) Teleport(driver, "#confirm-password", "ELONMUSK33");
 
 
                 if (!found) Teleport(driver, "#create-new-vault__terms-checkbox");
